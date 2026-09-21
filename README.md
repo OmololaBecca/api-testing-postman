@@ -1,19 +1,24 @@
-# api-testing-postman
+# Postman API Testing
 
-API testing project for a fintech platform using **Postman**.
+API testing project covering authentication, authorization, and transaction workflows using Postman.
 
- 🔹 Coverage
+### Coverage
 
-**Authentication · Authorization · Transactions · KYC**
+* Positive & negative scenarios
+* Response validation
+* Error handling
+* Authentication & authorization
+* Request/response validation
 
- 🔹 Testing
+### Tools
 
-**Positive & Negative Testing · Validation · Response Assertions · Error Handling**
+**Postman · REST API · JavaScript · Newman**
 
-🔹 Tools
+### Structure
 
-**Postman · JavaScript · GitHub**
+* `collections/` — Postman API test collections
+* `environments/` — Example environment configuration
 
- 🔹 Automation
+### Run
 
-Newman & GitHub Actions planned for automated regression and CI/CD.
+Import the collection into Postman, configure the environment variables, and run the collection using Collection Runner.
