@@ -1,0 +1,168 @@
+{
+  "info": {
+    "_postman_id": "f6891eb5-5983-4fa2-8716-a5fdf99b621f",
+    "name": "Authorization",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "38465650",
+    "_collection_link": "https://go.postman.co/collection/38465650-f6891eb5-5983-4fa2-8716-a5fdf99b621f?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Admin- User",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 201\", function () {\n    pm.response.to.have.status(201);\n});\n\npm.test(\"Access token is returned\", function () {\n    const response = pm.response.json();\n    pm.expect(response.data.token).to.exist;\n});\n\npm.test(\"success message is returned\", function () {\n    const response = pm.response.json();\n    pm.expect(response.message).to.eql(\"Login successful\");\n});\n\npm.test(\"User information is returned\", function () {\n    const response = pm.response.json();\n\n    pm.expect(response.data.id).to.exist;\n    pm.expect(response.data.name).to.exist;\n    pm.expect(response.data.verify).to.exist;\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"email\": \"{{test_login}}\",\n    \"password\": \"{{test_password}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/v2.0/users/login",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "v2.0",
+            "users",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Admin- Valid user",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"JSON title response is correct\", function () {\n    const pmJson = pm.response.json();\n\n    pm.expect(pmJson.title).to.eql(\"Admin\");\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{{auth}}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"email\": \"{{test_admin}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/v2.0/admins/login",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "v2.0",
+            "admins",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Admin- Unauthorised request",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"JSON title response is correct\", function () {\n    const pmMsg = pm.response.json();\n\n    pm.expect(pmMsg.message).to.eql(\"Unauthorized\");\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{json_web_token_0lg8}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"email\": \"utest@gmail.com\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/{/v2.0/admins/notifications/count",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "{",
+            "v2.0",
+            "admins",
+            "notifications",
+            "count"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "json_web_token_0lg8",
+      "secret": true
+    },
+    {
+      "key": "{auth}",
+      "secret": true,
+      "source": {
+        "provider": "postman",
+        "postman": {
+          "type": "local",
+          "secretId": "cb9c7a21-3c6e-435b-89fc-c402f6a3610c",
+          "vaultId": "local"
+        }
+      }
+    }
+  ]
+}

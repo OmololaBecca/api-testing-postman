@@ -1,0 +1,129 @@
+{
+  "info": {
+    "_postman_id": "ef70ad79-c5a0-41d4-8a29-21b918f35aab",
+    "name": "Authentication",
+    "description": "## Authentication\n\nThis collection covers the **login authentication flow**, providing a set of requests to validate how the API handles user sign-in under different conditions.\n\n### What's included\n\n- **Login – Valid Credentials**: Verifies that a user can successfully authenticate with correct credentials and receive a valid response (e.g. token or session).\n    \n- **Login – Invalid Credentials**: Confirms that the API correctly rejects login attempts made with wrong or malformed credentials, returning the appropriate error response.\n    \n- **Login – Security Test**: Tests the authentication endpoint against security-related scenarios (e.g. injection attempts, edge-case inputs) to ensure the endpoint is robust and does not expose sensitive information.\n    \n\n### Purpose\n\nUse this collection to test the reliability, correctness, and security of your login endpoint. It is designed to be run as part of a broader API testing workflow alongside the **Authorization**, **Registration**, and **KYC** collections in this workspace.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "38465650",
+    "_collection_link": "https://go.postman.co/collection/38465650-ef70ad79-c5a0-41d4-8a29-21b918f35aab?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Login- Valid credentials",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 201\", function () {\n    pm.response.to.have.status(201);\n});\n\npm.test(\"Access token is returned\", function () {\n    const response = pm.response.json();\n    pm.expect(response.data.token).to.exist;\n});\n\npm.test(\"success message is returned\", function () {\n    const response = pm.response.json();\n    pm.expect(response.message).to.eql(\"Login successful\");\n});\n\npm.test(\"User information is returned\", function () {\n    const response = pm.response.json();\n\n    pm.expect(response.data.id).to.exist;\n    pm.expect(response.data.name).to.exist;\n    pm.expect(response.data.verify).to.exist;\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"email\": \"{{test_login}}\",\n    \"password\": \"{{test_password}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/v2.0/users/login",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "v2.0",
+            "users",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Login- Security test",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 400\", function () {\n    pm.response.to.have.status(400);\n});\n\npm.test(\"Access token is not returned\", function () {\n    const response = pm.response.json();\n    pm.expect(response.token).to.not.exist;\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"email\": \"{{test_login}}\",\n    \"password\": \"{{test_password}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/v2.0/users/login",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "v2.0",
+            "users",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Login- Invalid Credentials",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 400\", function () {\n    pm.response.to.have.status(400);\n});\n\npm.test(\"Access token is not returned\", function () {\n    const response = pm.response.json();\n    pm.expect(response.token).to.not.exist;\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"email\": \"{{test_login}}\",\n    \"password\": \"{{test_password}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/v2.0/users/login",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "v2.0",
+            "users",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

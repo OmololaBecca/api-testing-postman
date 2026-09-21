@@ -1,0 +1,169 @@
+{
+  "info": {
+    "_postman_id": "924e738d-67f6-4c70-bdf3-5f2aeeb446b5",
+    "name": "Registeration",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "38465650",
+    "_collection_link": "https://go.postman.co/collection/38465650-924e738d-67f6-4c70-bdf3-5f2aeeb446b5?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Vailid registration",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 201\", function () {\n    pm.response.to.have.status(201);\n});\n\npm.test(\"Response body is valid JSON\", function () {\n    pm.response.to.be.json;\n});\n\npm.test(\"Registration was successful\", function () {\n    const jsonData = pm.response.json();\n    pm.expect(jsonData.status).to.eql(\"success\");\n    pm.expect(jsonData.message).to.eql(\"Registration successful\");\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"email\": \"{{test_email_reg}}\",\n    \"password\": \"{{test_password}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/v4.0/users/register",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "v4.0",
+            "users",
+            "register"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "otp_validation",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"email\": \"*******+api@gmail.com\",\n    \"otp\": \"*******\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/v4.0/users/register/verify-otp",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "v4.0",
+            "users",
+            "register",
+            "verify-otp"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "sign-up - Invalid Payload",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 4xx (client error)\", function () {\n    pm.expect(pm.response.code).to.be.within(400, 499);\n});\n\npm.test(\"Response body is valid JSON\", function () {\n    pm.response.to.be.json;\n});\n\npm.test(\"Response contains 'status' field indicating failure\", function () {\n    const jsonData = pm.response.json();\n    pm.expect(jsonData).to.have.property(\"statusCode\");\n    pm.expect(jsonData.status).to.not.eql(\"success\");\n});\n\npm.test(\"Response contains an error message or description\", function () {\n    const jsonData = pm.response.json();\n    const hasMessage = jsonData.hasOwnProperty(\"message\") || jsonData.hasOwnProperty(\"error\") || jsonData.hasOwnProperty(\"errors\");\n    pm.expect(hasMessage).to.be.true;\n});\n\npm.test(\"Response does not return 201 Created\", function () {\n    pm.response.to.not.have.status(201);\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"email\": \"not-an-email\", \"password\": \"@Test123\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/v4.0/users/register",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "v4.0",
+            "users",
+            "register"
+          ]
+        },
+        "description": "Generated from cURL: curl -X POST \"{{base_url}}/v4.0/users/register\" -H \"Content-Type: application/json\" -d '{\"email\": \"not-an-email\", \"password\": \"@Test123\", \"confirmPassword\": \"WrongPassword999\"}'"
+      },
+      "response": []
+    },
+    {
+      "name": "sign-up - Security test",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 4xx (client error)\", function () {\n    pm.expect(pm.response.code).to.be.within(400, 499);\n});\n\npm.test(\"Response body is valid JSON\", function () {\n    pm.response.to.be.json;\n});\n\npm.test(\"Response contains 'status' field indicating failure\", function () {\n    const jsonData = pm.response.json();\n    pm.expect(jsonData).to.have.property(\"status\");\n    pm.expect(jsonData.status).to.not.eql(\"success\");\n});\n\npm.test(\"Response contains an error message or description\", function () {\n    const jsonData = pm.response.json();\n    const hasMessage = jsonData.hasOwnProperty(\"message\") || jsonData.hasOwnProperty(\"error\") || jsonData.hasOwnProperty(\"errors\");\n    pm.expect(hasMessage).to.be.true;\n});\n\npm.test(\"Response does not return 201 Created\", function () {\n    pm.response.to.not.have.status(201);\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"email\": \"not-an-email\", \"password\": \"@Test123\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/v4.0/users/register",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "v4.0",
+            "users",
+            "register"
+          ]
+        },
+        "description": "Generated from cURL: curl -X POST \"{{base_url}}/v4.0/users/register\" -H \"Content-Type: application/json\" -d '{\"email\": \"not-an-email\", \"password\": \"@Test123\", \"confirmPassword\": \"WrongPassword999\"}'"
+      },
+      "response": []
+    }
+  ]
+}

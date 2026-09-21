@@ -1,0 +1,162 @@
+{
+  "info": {
+    "_postman_id": "773f5e3b-73db-4de4-bb04-864b929507d2",
+    "name": "Transacitions (withdrawal)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "38465650",
+    "_collection_link": "https://go.postman.co/collection/38465650-773f5e3b-73db-4de4-bb04-864b929507d2?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "sender login",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{supabase_service_role_api_key_0jzo}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"email\": \"{{test_login}}\",\n    \"password\": \"{{test_password}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/v2.0/users/login",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "v2.0",
+            "users",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Sender holding account",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Unauthenticated request returns 200\", function () {\n    pm.response.to.have.status(200);\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{supabase_service_role_api_key_0gu3}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/{v2.1/holding-accounts",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "{v2.1",
+            "holding-accounts"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Withdrawal (sender-receiver)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 400\", function () {\n    pm.response.to.have.status(400);\n});\n\npm.test(\"Response content-type is application/json\", function () {\n    pm.response.to.have.header(\"Content-Type\", \"application/json; charset=utf-8\");\n});\n\npm.test(\"Response has correct error structure\", function () {\n    const jsonData = pm.response.json();\n    pm.expect(jsonData).to.have.property(\"status\", \"error\");\n    pm.expect(jsonData).to.have.property(\"title\", \"Request Validation\");\n    pm.expect(jsonData).to.have.property(\"message\");\n    pm.expect(jsonData).to.have.property(\"code\", 400);\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{supabase_service_role_api_key_0cwo}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"amount\":\"10\",\n    \"userId\":\"6aa1e67c0afe442d0b1b886a\",\n    \"pin\":\"1234\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/{/v2.1/holding-accounts/6a33f835064cc368458f8344/withdraw/internal",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "{",
+            "v2.1",
+            "holding-accounts",
+            "6a33f835064cc368458f8344",
+            "withdraw",
+            "internal"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "supabase_service_role_api_key_14pu",
+      "secret": true
+    },
+    {
+      "key": "supabase_service_role_api_key_0cwo",
+      "secret": true
+    },
+    {
+      "key": "json_web_token_18d4",
+      "secret": true
+    },
+    {
+      "key": "supabase_service_role_api_key_0jzo",
+      "secret": true
+    },
+    {
+      "key": "supabase_service_role_api_key_0gu3",
+      "secret": true
+    }
+  ]
+}

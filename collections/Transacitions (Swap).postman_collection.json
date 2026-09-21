@@ -1,0 +1,175 @@
+{
+  "info": {
+    "_postman_id": "fc992185-0866-48dd-810f-0a4eb0658f10",
+    "name": "Transacitions (Swap)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "38465650",
+    "_collection_link": "https://go.postman.co/collection/38465650-fc992185-0866-48dd-810f-0a4eb0658f10?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "initiate",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{supabase_service_role_api_key_0lvf}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"fromCurrency\": \"usdt\", //btc, usdt,\n    \"toCurrency\": \"btc\", //btc, usdt,\n    \"amount\": 1000\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/v2.0/holding-accounts/swap/initiate",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "v2.0",
+            "holding-accounts",
+            "swap",
+            "initiate"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "confirm swap -valid transaction",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 201\", function () {\n    pm.response.to.have.status(201);\n});\n\npm.test(\"Response time is less than 6000ms\", function (){\n    pm.expect(pm.response.responseTime).to.be.below(6000);\n});\n\n\npm.test(\"data.toCurrency is exactly the expected currency (btc)\", function () {\n    const jsonData = pm.response.json();\n    pm.expect(jsonData.data).to.have.property(\"toCurrency\");\n    pm.expect(jsonData.data.toCurrency).to.eql(\"btc\");\n});\n\n// Verify response toCurrency matches what was sent in the request payload\npm.test(\"Response toCurrency matches request payload toCurrency\", function () {\n    const requestBody = JSON.parse(pm.request.body.raw.replace(/\\/\\/.*$/gm, \"\").trim());\n    const jsonData = pm.response.json();\n    pm.expect(jsonData.data.toCurrency).to.eql(requestBody.toCurrency);\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{json_web_token_0g32}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"fromCurrency\": \"usdt\", //btc, usdt,\n    \"toCurrency\": \"btc\", //btc, usdt,\n    \"amount\": 2.5\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/v2.1/holding-accounts/swap/9e962afa338948a68380bb546575c560/confirm",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "v2.1",
+            "holding-accounts",
+            "swap",
+            "9e962afa338948a68380bb546575c560",
+            "confirm"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "confirm swap -Insufficient balance",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"json returns correct message\", function() {\n    const reponseJson = pm.response.json();\n    pm.expect(reponseJson.message).to.eql(\"Insufficient Balance\");\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{json_web_token_0g32}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"fromCurrency\": \"usdt\", //btc, usdt,\n    \"toCurrency\": \"btc\", //btc, usdt,\n    \"amount\": 10000000000000000000\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/{/v2.1/holding-accounts/swap/9e962afa338948a68380bb546575c560/confirm",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "{",
+            "v2.1",
+            "holding-accounts",
+            "swap",
+            "9e962afa338948a68380bb546575c560",
+            "confirm"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "supabase_service_role_api_key_14pu",
+      "secret": true
+    },
+    {
+      "key": "supabase_service_role_api_key_0cwo",
+      "secret": true
+    },
+    {
+      "key": "json_web_token_18d4",
+      "secret": true
+    },
+    {
+      "key": "supabase_service_role_api_key_0lvf",
+      "secret": true
+    },
+    {
+      "key": "json_web_token_0g32",
+      "secret": true
+    }
+  ]
+}
