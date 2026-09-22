@@ -19,3 +19,4 @@ jobs:
       - name: Run API tests
         run: |
           postman collection run "38465650-ef70ad79-c5a0-41d4-8a29-21b918f35aab" -e "38465650-e2b0f048-6ac4-4909-a35c-018af7e3b4e9"
+          --env-var "base_url=${{ secrets.STAGING_BASE_URL }}" \
