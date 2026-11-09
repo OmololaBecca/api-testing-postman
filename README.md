@@ -2,6 +2,13 @@
 
 CI/CD API testing project covering authentication, authorization, and transaction workflows using Postman.
 
+## API 
+* Login
+* Register
+* Transaction (swap)
+* Transaction (withdrawal)
+
+
 ## Coverage
 
 * Positive & negative scenarios
